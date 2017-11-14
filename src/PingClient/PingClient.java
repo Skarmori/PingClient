@@ -31,7 +31,11 @@ public class PingClient {
 		int enviados = 10;
 		// Perdidos
 		int perdidos = 0;
-		// % de perdas
+		// % enviados
+		int percenEnviados = 0;
+		// % recebidos
+		int percenRecebidos = 0;
+		// % perdas
 		int percenPerdas = 0;
 
 		DatagramSocket socket = new DatagramSocket();
@@ -71,6 +75,8 @@ public class PingClient {
 
 				soma = soma + rtt;
 				perdidos = enviados - recebidos;
+				percenEnviados = enviados * 10;
+				percenRecebidos = recebidos * 10;
 				percenPerdas = perdidos * 10;
 
 				System.out.println("Tempo mínimo: " + minimo + "ms\n");
@@ -86,12 +92,17 @@ public class PingClient {
 
 		double medio = soma / recebidos;
 
-		System.out.print("Estatísticas do Ping para localhost/127.0.0.1:12345: " + "\n");
+		System.out.print("Estatísticas do Ping para localhost/127.0.0.1:12345:\n");
 		System.out.println("    Pacotes: Enviados = " + enviados + ", " + "Recebidos = " + recebidos + ", "
-				+ "Perdidos = " + perdidos + ", " + "(" + percenPerdas + "% de perda)" + "\n");
-		System.out.println("Tempo Mínimo, Máximo e Médio dos pacotes sem perdas em milissegundos: ");
+				+ "Perdidos = " + perdidos + ",\n ");
+		System.out.print("Percentual dos pacotes Enviados, Recebidos e Perdidos:\n");
+		System.out.println("    Enviados: " + "(" + percenEnviados + "%)" + "," + " Recebidos: " + "(" + percenRecebidos
+				+ "%)" + "," + " Perdidos: " + "(" + percenPerdas + "%),\n");
+		System.out.print("Tempo Mínimo, Máximo e Médio dos pacotes sem perdas em milissegundos:\n");
 		System.out.println("    Mínimo = " + minimo + "ms" + ", " + "Máximo = " + maximo + "ms" + ", " + "Médio = "
-				+ medio + "ms");
+				+ medio + "ms,\n");
+		System.out.println("Pacotes perdidos irão estar contidos apenas na rede de envio");
+
 	}
 
 	/*
