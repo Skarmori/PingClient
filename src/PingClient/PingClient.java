@@ -16,7 +16,7 @@ public class PingClient {
 
 	public static void main(String[] args) throws Exception {
 
-		String ServerName = ("localhost");
+		String ServerName = args[0];
 		int port = 12345;
 
 		// Mínimo
@@ -49,7 +49,6 @@ public class PingClient {
 			DatagramPacket request = new DatagramPacket(Message.getBytes(), Message.length(), IPAddress, port);
 
 			long SendTime = System.currentTimeMillis();
-			System.out.println("Ping " + i + " para " + IPAddress + ":" + port + " time = " + SendTime + "ms\n");
 			socket.send(request);
 
 			DatagramPacket reply = new DatagramPacket(new byte[1024], 1024);
@@ -61,8 +60,10 @@ public class PingClient {
 
 				long RcvTime = System.currentTimeMillis();
 				long rtt = RcvTime - SendTime;
-				System.out.println("Rcv time do pacote " + i + ": " + RcvTime + "ms\n");
-				System.out.println("RTT do pacote " + i + ": " + rtt + "ms\n");
+				//System.out.println("Rcv time do pacote " + i + ": " + RcvTime + "ms\n");
+				//System.out.println("RTT do pacote " + i + ": " + rtt + "ms\n");
+				System.out.println("Ping " + i + " para " + IPAddress + ":" + port + " RTT = " + rtt + "ms");
+				
 				recebidos++;
 
 				if (minimo > rtt) {
@@ -79,8 +80,8 @@ public class PingClient {
 				percenRecebidos = recebidos * 10;
 				percenPerdas = perdidos * 10;
 
-				System.out.println("Tempo mínimo: " + minimo + "ms\n");
-				System.out.println("Tempo máximo: " + maximo + "ms\n");
+				// System.out.println("Tempo mínimo: " + minimo + "ms\n");
+				// System.out.println("Tempo máximo: " + maximo + "ms\n");
 
 			} catch (IOException E) {
 
@@ -92,7 +93,7 @@ public class PingClient {
 
 		double medio = soma / recebidos;
 
-		System.out.print("Estatísticas do Ping para localhost/127.0.0.1:12345:\n");
+		System.out.print("Estatísticas do Ping para" + ServerName + ":12345:\n");
 		System.out.println("    Pacotes: Enviados = " + enviados + ", " + "Recebidos = " + recebidos + ", "
 				+ "Perdidos = " + perdidos + ",\n ");
 		System.out.print("Percentual dos pacotes Enviados, Recebidos e Perdidos:\n");
