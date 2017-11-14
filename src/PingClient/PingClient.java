@@ -19,27 +19,33 @@ public class PingClient {
 		String ServerName = ("localhost");
 		int port = 12345;
 
+		// M√≠nimo
 		long minimo = Long.MAX_VALUE;
-
-		// M·ximo
+		// M√°ximo
 		long maximo = 0;
-
-		// MÈdio
+		// M√©dio
 		double soma = 0;
+		// Recebidos
 		int recebidos = 0;
+		// Enviados
+		int enviados = 10;
+		// Perdidos
+		int perdidos = 0;
+		// % de perdas
+		int percenPerdas = 0;
 
 		DatagramSocket socket = new DatagramSocket();
 		InetAddress IPAddress = InetAddress.getByName(ServerName);
 
 		for (int i = 0; i < 10; i++) {
 
-			// Calcular mÌnimo / m·ximo / mÈdio //
+			// Calcular m√≠nimo / m√°ximo / m√©dio //
 
 			String Message = "Processando.. ";
 			DatagramPacket request = new DatagramPacket(Message.getBytes(), Message.length(), IPAddress, port);
 
 			long SendTime = System.currentTimeMillis();
-			System.out.println("Ping " + i + " para " + IPAddress + ":" + port + " em " + SendTime + "ms/s\n");
+			System.out.println("Ping " + i + " para " + IPAddress + ":" + port + " time = " + SendTime + "ms\n");
 			socket.send(request);
 
 			DatagramPacket reply = new DatagramPacket(new byte[1024], 1024);
@@ -51,8 +57,8 @@ public class PingClient {
 
 				long RcvTime = System.currentTimeMillis();
 				long rtt = RcvTime - SendTime;
-				System.out.println("Rcv time do pacote " + i + ": " + RcvTime + "ms/s\n");
-				System.out.println("RTT do pacote " + i + ": " + rtt + "ms/s\n");
+				System.out.println("Rcv time do pacote " + i + ": " + RcvTime + "ms\n");
+				System.out.println("RTT do pacote " + i + ": " + rtt + "ms\n");
 				recebidos++;
 
 				if (minimo > rtt) {
@@ -64,9 +70,11 @@ public class PingClient {
 				}
 
 				soma = soma + rtt;
+				perdidos = enviados - recebidos;
+				percenPerdas = perdidos * 10;
 
-				System.out.println("Tempo mÌnimo: " + minimo + "ms/s\n");
-				System.out.println("Tempo m·ximo: " + maximo + "ms/s\n");
+				System.out.println("Tempo m√≠nimo: " + minimo + "ms\n");
+				System.out.println("Tempo m√°ximo: " + maximo + "ms\n");
 
 			} catch (IOException E) {
 
@@ -77,8 +85,13 @@ public class PingClient {
 		}
 
 		double medio = soma / recebidos;
-		System.out.println("Tempo mÈdio dos pacotes sem perdas: " + medio + "ms/s\n");
 
+		System.out.print("Estat√≠sticas do Ping para localhost/127.0.0.1:12345: " + "\n");
+		System.out.println("    Pacotes: Enviados = " + enviados + ", " + "Recebidos = " + recebidos + ", "
+				+ "Perdidos = " + perdidos + ", " + "(" + percenPerdas + "% de perda)" + "\n");
+		System.out.println("Tempo M√≠nimo, M√°ximo e M√©dio dos pacotes sem perdas em milissegundos: ");
+		System.out.println("    M√≠nimo = " + minimo + "ms" + ", " + "M√°ximo = " + maximo + "ms" + ", " + "M√©dio = "
+				+ medio + "ms");
 	}
 
 	/*
