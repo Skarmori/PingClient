@@ -25,16 +25,12 @@ public class PingClient {
 		long maximo = 0;
 		// Médio
 		double soma = 0;
-		// Recebidos
-		int recebidos = 0;
 		// Enviados
 		int enviados = 10;
+		// Recebidos
+		int recebidos = 0;
 		// Perdidos
 		int perdidos = 0;
-		// % enviados
-		int percenEnviados = 0;
-		// % recebidos
-		int percenRecebidos = 0;
 		// % perdas
 		int percenPerdas = 0;
 
@@ -60,10 +56,12 @@ public class PingClient {
 
 				long RcvTime = System.currentTimeMillis();
 				long rtt = RcvTime - SendTime;
-				//System.out.println("Rcv time do pacote " + i + ": " + RcvTime + "ms\n");
-				//System.out.println("RTT do pacote " + i + ": " + rtt + "ms\n");
+				// System.out.println("Rcv time do pacote " + i + ": " + RcvTime
+				// + "ms\n");
+				// System.out.println("RTT do pacote " + i + ": " + rtt +
+				// "ms\n");
 				System.out.println("Ping " + i + " para " + IPAddress + ":" + port + " RTT = " + rtt + "ms");
-				
+
 				recebidos++;
 
 				if (minimo > rtt) {
@@ -76,8 +74,6 @@ public class PingClient {
 
 				soma = soma + rtt;
 				perdidos = enviados - recebidos;
-				percenEnviados = enviados * 10;
-				percenRecebidos = recebidos * 10;
 				percenPerdas = perdidos * 10;
 
 				// System.out.println("Tempo mínimo: " + minimo + "ms\n");
@@ -92,17 +88,13 @@ public class PingClient {
 		}
 
 		double medio = soma / recebidos;
-
-		System.out.print("Estatísticas do Ping para" + ServerName + ":12345:\n");
+		System.out.print("\n");
+		System.out.print("Estatísticas do Ping para " + ServerName + ":12345:\n");
 		System.out.println("    Pacotes: Enviados = " + enviados + ", " + "Recebidos = " + recebidos + ", "
-				+ "Perdidos = " + perdidos + ",\n ");
-		System.out.print("Percentual dos pacotes Enviados, Recebidos e Perdidos:\n");
-		System.out.println("    Enviados: " + "(" + percenEnviados + "%)" + "," + " Recebidos: " + "(" + percenRecebidos
-				+ "%)" + "," + " Perdidos: " + "(" + percenPerdas + "%),\n");
+				+ "Perdidos = " + perdidos + " (" + percenPerdas + "% de perda),\n ");
 		System.out.print("Tempo Mínimo, Máximo e Médio dos pacotes sem perdas em milissegundos:\n");
 		System.out.println("    Mínimo = " + minimo + "ms" + ", " + "Máximo = " + maximo + "ms" + ", " + "Médio = "
-				+ medio + "ms,\n");
-		System.out.println("Pacotes perdidos irão estar contidos apenas na rede de envio");
+				+ medio + "ms");
 
 	}
 
